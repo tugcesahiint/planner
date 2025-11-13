@@ -1,0 +1,36 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Planner Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>AI Planner Generator</h1>
+    <p>Create unique printable planners with AI – ready for Etsy.</p>
+
+    <form action="{{ url_for('generate') }}" method="post" class="form-card">
+        <label for="prompt">Style prompt (optional)</label>
+        <textarea
+            id="prompt"
+            name="prompt"
+            rows="4"
+            placeholder="Example: pastel pink aesthetic with cute doodles for busy moms"
+        ></textarea>
+
+        <button type="submit">Generate Planner</button>
+
+        <p class="hint">
+            Leave empty for a random style.  
+            Each time you click, AI will create a different look.
+        </p>
+    </form>
+
+    <footer>
+        <p>Built with Flask + OpenAI + Pillow</p>
+    </footer>
+</div>
+</body>
+</html>
