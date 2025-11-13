@@ -108,6 +108,23 @@ def load_font(size: int) -> ImageFont.FreeTypeFont:
         return ImageFont.load_default()
 
 
+def get_text_size(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont):
+    """
+    Pillow'un farklı sürümleri için güvenli text ölçüm fonksiyonu.
+    Önce textbbox dener, olmazsa font.getsize'a düşer.
+    """
+    try:
+        bbox = draw.textbbox((0, 0), text, font=font)
+        w = bbox[2] - bbox[0]
+        h = bbox[3] - bbox[1]
+        return w, h
+    except Exception:
+        try:
+            return font.getsize(text)
+        except Exception:
+            return 0, 0
+
+
 def draw_planner(style: Dict, size_name: str, output_dir: str) -> str:
     """
     Pillow kullanarak planner görseli üretir.
@@ -149,7 +166,7 @@ def draw_planner(style: Dict, size_name: str, output_dir: str) -> str:
 
     # Başlık
     title_font = load_font(int(header_height * 0.45))
-    title_w, title_h = draw.textsize(title, font=title_font)
+    title_w, title_h = get_text_size(draw, title, title_font)
     title_x = (width - title_w) // 2
     title_y = margin_y + (header_height - title_h) // 3
     draw.text((title_x, title_y), title, fill=(255, 255, 255), font=title_font)
@@ -157,7 +174,7 @@ def draw_planner(style: Dict, size_name: str, output_dir: str) -> str:
     # Quote (başlığın altına)
     if quote:
         quote_font = load_font(int(header_height * 0.2))
-        quote_w, quote_h = draw.textsize(quote, font=quote_font)
+        quote_w, quote_h = get_text_size(draw, quote, quote_font)
         quote_x = (width - quote_w) // 2
         quote_y = margin_y + header_height - quote_h - int(header_height * 0.15)
         draw.text((quote_x, quote_y), quote, fill=(255, 255, 255), font=quote_font)
@@ -167,7 +184,7 @@ def draw_planner(style: Dict, size_name: str, output_dir: str) -> str:
     if style_name:
         style_font = load_font(int(header_height * 0.18))
         label = f"Style: {style_name}"
-        label_w, label_h = draw.textsize(label, font=style_font)
+        label_w, label_h = get_text_size(draw, label, style_font)
         label_x = width - margin_x - label_w
         label_y = margin_y - int(header_height * 0.4)
         draw.text((label_x, label_y), label, fill=text_color, font=style_font)
@@ -182,7 +199,7 @@ def draw_planner(style: Dict, size_name: str, output_dir: str) -> str:
     section_height = (available_height - (num_sections - 1) * gap) // num_sections
 
     section_title_font = load_font(int(section_height * 0.18))
-    section_body_font = load_font(int(section_height * 0.13))
+    section_body_font = load_font(int(section_height * 0.13))  # şu an sadece çizgilerde kullanıyoruz
 
     for i, section_name in enumerate(sections):
         top = available_top + i * (section_height + gap)
