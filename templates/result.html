@@ -3,47 +3,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your AI Planner</title>
+    <title>Your Planner Bundle</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <div class="container">
-    <h1>Your AI Planner</h1>
+    <h1>Your AI-Generated Planner Bundle</h1>
 
     <div class="style-summary">
-        <h2>{{ style.title }} – <span>{{ style.style_name }}</span></h2>
+        <h2>{{ style.collection_name }} – <span>{{ style.style_name }}</span></h2>
+
         {% if user_prompt %}
             <p><strong>Your prompt:</strong> {{ user_prompt }}</p>
         {% endif %}
+
+        <p><strong>Main title:</strong> {{ style.title }}</p>
         <p><strong>Quote:</strong> “{{ style.quote }}”</p>
 
-        <p><strong>Sections:</strong>
-            {% for sec in style.sections %}
-                <span class="tag">{{ sec }}</span>
-            {% endfor %}
-        </p>
+        <p><strong>Pages included:</strong> Cover, Daily, Weekly, Monthly, Yearly, Notes</p>
     </div>
 
     <div class="preview-grid">
         <div class="preview-card">
-            <h3>A4 (210 x 297 mm, 300 DPI)</h3>
-            <img src="{{ url_for('static', filename=a4_image) }}" alt="A4 Planner Preview">
-            <a class="download-btn" href="{{ url_for('static', filename=a4_image) }}" download>Download A4 PNG</a>
+            <h3>A4 Bundle (PDF)</h3>
+            <img src="{{ url_for('static', filename=a4_preview) }}" alt="A4 Planner Preview">
+            <a class="download-btn" href="{{ url_for('static', filename=a4_pdf) }}" download>
+                Download A4 PDF (6 pages)
+            </a>
         </div>
 
         <div class="preview-card">
-            <h3>US Letter (8.5 x 11 in, 300 DPI)</h3>
-            <img src="{{ url_for('static', filename=us_image) }}" alt="US Letter Planner Preview">
-            <a class="download-btn" href="{{ url_for('static', filename=us_image) }}" download>Download US Letter PNG</a>
+            <h3>US Letter Bundle (PDF)</h3>
+            <img src="{{ url_for('static', filename=us_preview) }}" alt="US Letter Planner Preview">
+            <a class="download-btn" href="{{ url_for('static', filename=us_pdf) }}" download>
+                Download US Letter PDF (6 pages)
+            </a>
         </div>
     </div>
 
     <div class="actions">
-        <a href="{{ url_for('index') }}" class="secondary-btn">Generate Another Planner</a>
+        <a href="{{ url_for('index') }}" class="secondary-btn">Generate Another Bundle</a>
     </div>
 
     <footer>
-        <p>Tip: You can upload these PNG files as printables to Etsy (A4 & US Letter).</p>
+        <p>Each PDF contains: cover, daily, weekly, monthly, yearly and notes pages in the same style.</p>
     </footer>
 </div>
 </body>
